@@ -1,0 +1,1 @@
+pip install gradio langchain langchain-openai langchain-community chromadb python-dotenv openai unstructured pdfminer.six python-docx

@@ -186,4 +186,4 @@ if __name__ == "__main__":
     
     # Launch the Gradio interface
     demo = create_gradio_interface()
-    demo.launch(server_name="0.0.0.0")
+    demo.launch(share = True, server_name="0.0.0.0")
