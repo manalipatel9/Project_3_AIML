@@ -59,7 +59,7 @@ class FileProcessor:
             raise Exception(f"Error loading file: {str(e)}")
 
     def chunk_text(self, documents: List[str], 
-                  chunk_size: int = 1000,
+                  chunk_size: int = 500,
                   chunk_overlap: int = 200) -> List[str]:
         """Split documents into smaller chunks.
         
