@@ -19,6 +19,10 @@ Retrieval Augmented Generation (RAG) is a method that improves the performance o
 <img src="https://www.clarifai.com/hs-fs/hubfs/rag-query-drawio%20(1)-png-2.png?width=2056&height=1334&name=rag-query-drawio%20(1)-png-2.png" alt="Alt Text" width="600" height="400">
 </div>
 
+### <ins>Key Features</ins>
+- Document Processing
+- Conversational AI
+- NLP Model Integration for Intelligent Responses
 
 ### <ins>Results</ins>
 #### Chatbot Usage
@@ -35,10 +39,14 @@ Retrieval Augmented Generation (RAG) is a method that improves the performance o
 
 
 ### <ins>Future Development Plan</ins>
+- Integrate
+- Add support for multiple languages?
+- 
 
-
-### <ins>How to Run the Code</ins>
-
+### <ins>Installation</ins>
+1. Clone the Repository
+2. Install Required Packages
+3. Run the Application
 
 ### <ins>Slideshow</ins>
 
