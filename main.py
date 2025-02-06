@@ -4,8 +4,7 @@ from typing import List, Union
 from langchain.chains import ConversationalRetrievalChain
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from rag.file_processor import FileProcessor
-from rag.url_processor import URLProcessor
+from rag.processor import Processor
 from langchain_community.vectorstores import Chroma
 from dotenv import load_dotenv
 import shutil
@@ -14,8 +13,7 @@ import time
 class RAGApplication:
     def __init__(self, persist_directory: str = "chroma_db"):
         self.persist_directory = persist_directory
-        self.file_processor = FileProcessor(persist_directory=persist_directory)
-        self.url_processor = URLProcessor(persist_directory=persist_directory)
+        self.processor = Processor(persist_directory=persist_directory)
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7)
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",
@@ -47,8 +45,8 @@ class RAGApplication:
         try:
             # Create a unique collection name for this upload
             collection_name = f"file_{os.path.basename(file_path)}_{int(time.time())}"
-            self.vectorstore = self.file_processor.process_and_store(
-                file_path=file_path,
+            self.vectorstore = self.processor.process_and_store(
+                source=file_path,
                 collection_name=collection_name
             )
             self.current_collection = collection_name
@@ -61,8 +59,8 @@ class RAGApplication:
         try:
             # Create a unique collection name using timestamp and URL length
             collection_name = f"url_{len(url)}_{int(time.time())}"
-            self.vectorstore = self.url_processor.process_and_store(
-                url=url,
+            self.vectorstore = self.processor.process_and_store(
+                source=url,
                 collection_name=collection_name
             )
             self.current_collection = collection_name
@@ -75,8 +73,8 @@ class RAGApplication:
         try:
             # Create a unique collection name for this upload
             collection_name = f"urls_batch_{int(time.time())}"
-            self.vectorstore = self.url_processor.process_multiple_urls(
-                urls=urls,
+            self.vectorstore = self.processor.process_multiple_sources(
+                sources=urls,
                 collection_name=collection_name
             )
             self.current_collection = collection_name
