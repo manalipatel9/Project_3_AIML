@@ -6,6 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from rag.processor import Processor
 from langchain_community.vectorstores import Chroma
+from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 import shutil
 import time
@@ -14,7 +15,7 @@ class RAGApplication:
     def __init__(self, persist_directory: str = "chroma_db"):
         self.persist_directory = persist_directory
         self.processor = Processor(persist_directory=persist_directory)
-        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7)
+        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",
             output_key="answer",
@@ -23,6 +24,23 @@ class RAGApplication:
         self.vectorstore = None
         self.chain = None
         self.current_collection = None
+
+        template = """You are an assistant for question-answering tasks. 
+                        Use only the following pieces of retrieved context to answer 
+                        the question. If you don't know the answer, say that you 
+                        don't know. Use three sentences maximum and keep the 
+                        answer concise.
+
+                        {context}
+
+                        Question: {question}
+                        Answer:
+                    """
+        
+        self.system_prompt = PromptTemplate(
+            template=template,
+            input_variables=["context", "question"]
+        )
         
         # Ensure the directory exists
         os.makedirs(self.persist_directory, exist_ok=True)
@@ -37,7 +55,7 @@ class RAGApplication:
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
-            combine_docs_chain_kwargs={"prompt": None},
+            combine_docs_chain_kwargs={"prompt": self.system_prompt},
             verbose=True
         )
 
@@ -189,4 +207,4 @@ if __name__ == "__main__":
     
     # Launch the Gradio interface
     demo = create_gradio_interface()
-    demo.launch(share = True, server_name="0.0.0.0")
+    demo.launch(share = True, server_name="127.0.0.1:7860")
