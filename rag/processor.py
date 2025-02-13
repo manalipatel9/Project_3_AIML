@@ -13,6 +13,8 @@ import chromadb
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+import re
+from bs4 import BeautifulSoup
 
 class Processor:
     def __init__(self, persist_directory: str = "chroma_db"):
@@ -81,6 +83,39 @@ class Processor:
         except Exception as e:
             raise Exception(f"Error loading file: {str(e)}")
 
+    def clean_text(self, text: str) -> str:
+        """Clean text by removing extra whitespace, special characters, and unnecessary information.
+        
+        Args:
+            text (str): Text to be cleaned
+            
+        Returns:
+            str: Cleaned text
+        """
+        # Remove HTML tags if any
+        text = BeautifulSoup(text, "html.parser").get_text()
+        
+        # Replace multiple newlines with single newline
+        text = re.sub(r'\n\s*\n', '\n', text)
+        
+        # Replace multiple spaces with single space
+        text = re.sub(r'\s+', ' ', text)
+        
+        # Remove special characters except punctuation
+        text = re.sub(r'[^\w\s.,!?;:()\-\'\"]+', ' ', text)
+        
+        # Remove extra spaces around punctuation
+        text = re.sub(r'\s*([.,!?;:])\s*', r'\1 ', text)
+        
+        # Remove extra spaces around parentheses
+        text = re.sub(r'\s*\(\s*', ' (', text)
+        text = re.sub(r'\s*\)\s*', ') ', text)
+        
+        # Strip leading/trailing whitespace
+        text = text.strip()
+        
+        return text
+
     def chunk_text(self, documents: List[str], 
                   chunk_size: int = 1000,
                   chunk_overlap: int = 200) -> List[str]:
@@ -94,6 +129,15 @@ class Processor:
         Returns:
             List[str]: List of text chunks
         """
+        # Clean each document before chunking
+        cleaned_documents = []
+        for doc in documents:
+            if hasattr(doc, 'page_content'):
+                doc.page_content = self.clean_text(doc.page_content)
+            else:
+                doc = self.clean_text(str(doc))
+            cleaned_documents.append(doc)
+        
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
@@ -101,7 +145,7 @@ class Processor:
             is_separator_regex=False
         )
         
-        chunks = text_splitter.split_documents(documents)
+        chunks = text_splitter.split_documents(cleaned_documents)
         return chunks
 
     def process_and_store(self, source: str, 
