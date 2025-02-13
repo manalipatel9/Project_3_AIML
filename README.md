@@ -2,7 +2,20 @@
 
 A powerful document question-answering system that combines the capabilities of Large Language Models with local document processing. This application allows users to load documents or web content and engage in meaningful conversations about their content.
 
-## Features
+### Group Members
+* Matthew Dlugosz
+* Katia Monteros
+* Manali Patel
+* Gita Rani 
+
+#### What is RAG?
+'Retrieval Augmented Generation (RAG) is a method that improves the performance of Large Language Models (LLMs) by integrating an information retrieval component with the model's text generation capabilities.'
+
+<div align="center">
+<img src="https://www.clarifai.com/hs-fs/hubfs/rag-query-drawio%20(1)-png-2.png?width=2056&height=1334&name=rag-query-drawio%20(1)-png-2.png" alt="Alt Text" width="600" height="400">
+</div>
+
+### Features
 
 - Document Processing:
   - Support for local file uploads
@@ -18,12 +31,12 @@ A powerful document question-answering system that combines the capabilities of 
   - OpenAI's GPT-3.5 Turbo for natural language understanding
   - Gradio for the user interface
 
-## Prerequisites
+### Prerequisites
 
 - Python 3.x
 - OpenAI API Key
 
-## Installation
+### Installation
 
 1. Clone the repository:
 ```bash
@@ -47,7 +60,7 @@ pip install gradio langchain langchain-openai langchain-community chromadb pytho
 OPENAI_API_KEY=your_api_key_here
 ```
 
-## Usage
+### Chatbot Usage
 
 1. Start the application:
 ```bash
@@ -64,10 +77,11 @@ python main.py
      - Enter the source(s)
      - Click "Process Input" to load the content
    - In the "Chat" tab:
-     - Ask questions about the loaded documents
+     - Input a question about the loaded documents
      - Receive context-aware responses
+     - Continue asking questions or exit the conversation
 
-## Project Structure
+### Project Structure
 
 - `main.py`: Core application logic and Gradio interface
 - `rag/`: Directory containing RAG processing modules
@@ -75,10 +89,25 @@ python main.py
 - `.env`: Environment variables configuration
 - `install.txt`: Installation requirements
 
-## Notes
+### Notes
 
 - The application uses OpenAI's GPT-3.5 Turbo model by default
 - Documents are processed and stored locally using ChromaDB
 - Conversation history is maintained during each session
 - Use the "Clear All Data" button to reset the application state
+
+### Conclusion
+
+
+
+### Future Development Plan
+
+
+
+### Slideshow
+
+
+
+### Citations
+https://www.clarifai.com/blog/what-is-rag-retrieval-augmented-generation
 
