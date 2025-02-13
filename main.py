@@ -119,12 +119,13 @@ class RAGApplication:
             return f"Error clearing data: {str(e)}"
 
 def create_gradio_interface():
-
     rag_app = RAGApplication()
 
     def process_input(input_type: str, input_value: Union[str, List[str]]) -> str:
         if input_type == "file":
-            return rag_app.process_file(input_value)
+            if isinstance(input_value, str):  # If no file was uploaded
+                return "Please upload a file"
+            return rag_app.process_file(input_value.name)
         elif input_type == "url":
             return rag_app.process_url(input_value)
         elif input_type == "multiple_urls":
@@ -145,23 +146,43 @@ def create_gradio_interface():
                 value="file"
             )
 
-            input_value = gr.File(
-                label="Upload a file",
-                file_count="single"
+            # Create both input components
+            file_input = gr.File(
+                label="Drag and drop your file here",
+                file_count="single",
+                visible=True
             )
             
-            input_value = gr.Textbox(
-                label="Input (file path, URL, or comma-separated URLs)",
-                lines=2
+            text_input = gr.Textbox(
+                label="Enter URL",
+                lines=2,
+                visible=False
+            )
+            
+            def update_input_visibility(choice):
+                if choice == "file":
+                    return gr.update(visible=True), gr.update(visible=False)
+                else:
+                    label = "Enter URL" if choice == "url" else "Enter comma-separated URLs"
+                    return gr.update(visible=False), gr.update(visible=True, label=label)
+            
+            input_type.change(
+                fn=update_input_visibility,
+                inputs=[input_type],
+                outputs=[file_input, text_input]
             )
             
             process_btn = gr.Button("Process Input")
             clear_btn = gr.Button("Clear All Data", variant="secondary")
             process_output = gr.Textbox(label="Processing Result")
             
+            def process_wrapper(input_type, file_input, text_input):
+                input_value = file_input if input_type == "file" else text_input
+                return process_input(input_type, input_value)
+            
             process_btn.click(
-                fn=process_input,
-                inputs=[input_type, input_value],
+                fn=process_wrapper,
+                inputs=[input_type, file_input, text_input],
                 outputs=process_output
             )
             
