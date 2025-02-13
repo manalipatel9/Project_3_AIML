@@ -144,6 +144,11 @@ def create_gradio_interface():
                 label="Input Type",
                 value="file"
             )
+
+            input_value = gr.File(
+                label="Upload a file",
+                file_count="single"
+            )
             
             input_value = gr.Textbox(
                 label="Input (file path, URL, or comma-separated URLs)",
