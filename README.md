@@ -98,15 +98,20 @@ python main.py
 
 ### Conclusion
 
+- The results of this RAG Application comes out as small summary taken from the file you imputed
+- If the question is irrelevant to the data, it will say it is unable to answer.
 
 
 ### Future Development Plan
 
-
+- Make it useful for companies to use on their website (QA Chatbot)
+- Efficiency Improvements (Chunking / Tokenization / Data Extraction ) 
+- Knowledge Graphs
+- Web search backup 
 
 ### Slideshow
 
-
+https://docs.google.com/presentation/d/19ZJQXAJ6u45S4HUBPwtPeHOiNJoobAzKdSuXlCJBF6o/edit?usp=sharing 
 
 ### Citations
 https://www.clarifai.com/blog/what-is-rag-retrieval-augmented-generation
